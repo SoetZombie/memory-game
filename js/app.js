@@ -33,8 +33,8 @@ function onclicks () {
     restart()
   })
   $('.card').on('click', function () {
+    if (!$('.card').hasClass('show')) {moveCount++}
     flip($(this))
-    moveCount++
     $('.moves').text(moveCount)
     updateStars()
     if (isTimerRunning == false) {
@@ -48,9 +48,6 @@ function updateStars () {
     $('.fa-star').first().addClass('fa-star-o').removeClass('fa-star')
   }
   if (moveCount == 25) {
-    $('.fa-star').first().addClass('fa-star-o').removeClass('fa-star')
-  }
-  if (moveCount == 31) {
     $('.fa-star').first().addClass('fa-star-o').removeClass('fa-star')
   }
 }
@@ -84,9 +81,7 @@ function timerStart () {
   isTimerRunning = true
   timer = setInterval(increment, 1000)
 }
-function timerStop () {
-  timer = null
-}
+
 function increment () {
   seconds++
   $('.timer').text(seconds)
@@ -99,10 +94,14 @@ function restart () {
     $(this).empty()
     $(this).removeClass('open selected match  ')
     moveCount = 0
-    $('.moves').text(moveCount)
-    $('.stars .fa').removeClass('fa-star-o').addClass('fa-star')
   })
   shuffle(deck)
+  $('.moves').text(moveCount)
+  $('.stars .fa').removeClass('fa-star-o').addClass('fa-star')
+  seconds = 0
+  clearInterval(timer)
+  $('.timer').text(seconds)
+  isTimerRunning = false
 }
 
 function remove () {
@@ -115,6 +114,7 @@ function checkWin () {
     modal.style.display = 'block'
     $('.inTime').text(`It took you ${seconds} seconds`)
     $('.gottenStars').text(`And you get ${$('fa-star').length} stars`)
+    shown = []
   }
 }
 // modal logic w3schools
